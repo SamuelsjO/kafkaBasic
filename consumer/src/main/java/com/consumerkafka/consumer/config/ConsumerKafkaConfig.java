@@ -1,5 +1,6 @@
 package com.consumerkafka.consumer.config;
 
+import com.consumerkafka.consumer.presenter.MessagePresenter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class ConsumerKafkaConfig {
   private KafkaProperties kafkaProperties;
 
   @Bean
-  public ConsumerFactory<String, String> consumerFactory(){
+  public ConsumerFactory<String, MessagePresenter> consumerFactory(){
     var configs = new HashMap<String, Object>();
     configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
     configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -30,8 +31,8 @@ public class ConsumerKafkaConfig {
   }
 
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(){
-    var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
+  public ConcurrentKafkaListenerContainerFactory<String, MessagePresenter> kafkaListenerContainerFactory(){
+    var factory = new ConcurrentKafkaListenerContainerFactory<String, MessagePresenter>();
     factory.setConsumerFactory(consumerFactory());
     return factory;
   }

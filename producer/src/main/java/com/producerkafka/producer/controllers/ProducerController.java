@@ -1,23 +1,20 @@
 package com.producerkafka.producer.controllers;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.producerkafka.producer.presenter.MessagePresenter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@RestController
-public class ProducerController {
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplate;
 
-  @GetMapping("send")
-  public ResponseEntity<?> send(){
-    kafkaTemplate.send("topic-1", "Samuel do kafka: " + LocalDateTime.now());
-    return ResponseEntity.ok().build();
-  }
+@RequestMapping(value = "/v1", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+public interface ProducerController {
+  @PostMapping("/send")
+  ResponseEntity<?> send(@RequestBody List<MessagePresenter> presenter);
+
 }
